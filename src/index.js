@@ -30,7 +30,7 @@ const server = http.createServer((req, res) => {
       } catch (error) {
         console.error('Error parsing weather data:', error.message);
         res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end('Error fetching weather data');
+        res.end('Error While fetching weather data');
       }
     });
   });
