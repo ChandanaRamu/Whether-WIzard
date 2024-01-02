@@ -35,15 +35,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    env:
+      DOCKER_IMAGE_TAG: ${{ needs.build.outputs.DOCKER_IMAGE_TAG }}
     steps:
     - name: Set up Docker
       uses: docker/build-push-action@v2.7.0
       with:
         context: .
         push: true
-        tags: docker.io/weather-app:${{ steps.set-image-tag.outputs.DOCKER_IMAGE_TAG }}
+        tags: docker.io/weather-app:${DOCKER_IMAGE_TAG}
 
     - name: Deploy to Docker environment
       run: |
-        docker pull docker.io/weather-app:${{ steps.set-image-tag.outputs.DOCKER_IMAGE_TAG }}
-        docker run -d --name weather-app -p 3000:3000 docker.io/weather-app:${{ steps.set-image-tag.outputs.DOCKER_IMAGE_TAG }}
+        docker pull docker.io/weather-app:${DOCKER_IMAGE_TAG}
+        docker run -d --name weather-app -p 3000:3000 docker.io/weather-app:${DOCKER_IMAGE_TAG}
