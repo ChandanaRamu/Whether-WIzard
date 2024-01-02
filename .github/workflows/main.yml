@@ -39,7 +39,7 @@ jobs:
     - name: Set up Docker
       uses: docker/build-push-action@v2.7.0
       with:
-        context: weather-app
+        context: .
         push: true
         tags: docker.io/weather-app_app:latest, docker.io/weather-app_app:${{ github.sha }}
 
