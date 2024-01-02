@@ -50,4 +50,6 @@ jobs:
       - name: Deploy to Docker environment
         run: |
           docker pull chandanaramu/weather-app_app:${{ github.sha }}
+          docker stop weather-app || true
+          docker rm weather-app || true
           docker run -d --name weather-app -p 3000:3000 chandanaramu/weather-app_app:${{ github.sha }}
