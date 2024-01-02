@@ -22,13 +22,12 @@ jobs:
       run: npm install
 
     - name: Build Docker image
-      run: docker build -t weather-app .
+      run: docker build -t chandanaramu/weather-app_app .
 
     - name: Set Docker image tag as an output
       id: set-image-tag
       run: echo "DOCKER_IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
-    # Use the output in the next step or job
     - name: Use Docker image tag
       run: echo "Docker image tag is ${{ steps.set-image-tag.outputs.DOCKER_IMAGE_TAG }}"
 
@@ -44,10 +43,11 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker tag chandanaramu/weather-app ${{ secrets.DOCKER_USERNAME }}/weather-app:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/weather-app:${{ github.sha }}
+          docker tag chandanaramu/weather-app_app:${{ github.sha }} chandanaramu/weather-app_app:latest
+          docker push chandanaramu/weather-app_app:${{ github.sha }}
+          docker push chandanaramu/weather-app_app:latest
 
       - name: Deploy to Docker environment
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/weather-app:${{ github.sha }}
-          docker run -d --name weather-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/weather-app:${{ github.sha }}
+          docker pull chandanaramu/weather-app_app:${{ github.sha }}
+          docker run -d --name weather-app -p 3000:3000 chandanaramu/weather-app_app:${{ github.sha }}
