@@ -22,7 +22,7 @@ jobs:
       run: npm install
 
     - name: Build Docker image
-      run: docker build -t weather-app .
+      run: docker build -t weather-app_app .
 
     - name: Set Docker image tag as an output
       id: set-image-tag
@@ -35,17 +35,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    env:
-      DOCKER_IMAGE_TAG: ${{ needs.build.outputs.DOCKER_IMAGE_TAG }}
     steps:
     - name: Set up Docker
       uses: docker/build-push-action@v2.7.0
       with:
         context: .
         push: true
-        tags: docker.io/weather-app:${DOCKER_IMAGE_TAG}
+        tags: docker.io/weather-app_app:latest, docker.io/weather-app_app:${{ github.sha }}
 
     - name: Deploy to Docker environment
       run: |
-        docker pull docker.io/weather-app:${DOCKER_IMAGE_TAG}
-        docker run -d --name weather-app -p 3000:3000 docker.io/weather-app:${DOCKER_IMAGE_TAG}
+        docker pull docker.io/weather-app_app:${{ github.sha }}
+        docker run -d --name weather-app -p 3000:3000 docker.io/weather-app_app:${{ github.sha }}
