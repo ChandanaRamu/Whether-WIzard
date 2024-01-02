@@ -10,25 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '14'
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install dependencies
+      run: npm install
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+    - name: Build Docker image
+      run: docker build -t weather-app .
 
-      - name: Build Docker image
-        run: docker buildx build -t chandanaramu/weather-app .
+    - name: Set Docker image tag as an output
+      id: set-image-tag
+      run: echo "DOCKER_IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
-      - name: Test the application
-        run: docker run --rm -p 3000:3000 chandanaramu/weather-app npm test
+    # Use the output in the next step or job
+    - name: Use Docker image tag
+      run: echo "Docker image tag is ${{ steps.set-image-tag.outputs.DOCKER_IMAGE_TAG }}"
 
   deploy:
     runs-on: ubuntu-latest
