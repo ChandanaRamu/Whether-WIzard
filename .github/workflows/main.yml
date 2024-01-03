@@ -28,7 +28,8 @@ jobs:
       run: docker images
 
     - name: Show Docker image info
-      run: docker inspect chandanaramu/weather-app_app:${{ github.sha }}
+      run: docker inspect chandanaramu/weather-app_app:latest
+
 
     - name: Set Docker image tag as an output
       id: set-image-tag
