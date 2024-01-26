@@ -39,11 +39,11 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker tag weather-app ${{ secrets.DOCKER_USERNAME }}/weather-app:latest
+          docker tag weather-app ${{ secrets.DOCKER_USERNAME }}/weather-app
           docker push ${{ secrets.DOCKER_USERNAME }}/weather-app
       - name: Deploy to Docker environment
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/weather-app:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/weather-app
           docker stop weather-app || true
           docker rm weather-app || true
-          docker run -d --name weather-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/weather-app:latest
+          docker run -d --name weather-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/weather-app
