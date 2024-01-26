@@ -39,7 +39,7 @@ const server = http.createServer((req, res) => {
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end(finalHtml);
       } catch (error) {
-        console.error('Error parsing weather data:', error.message);
+        console.error('Error while parsing weather data:', error.message);
         // Read HTML content from file for error
         const errorHtmlContent = fs.readFileSync(path.join(__dirname, 'public', 'error.html'), 'utf8');
         // Send HTML response for error
