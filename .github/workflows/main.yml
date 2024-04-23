@@ -8,11 +8,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     outputs:
-      
       image: ${{ steps.build-image.outputs.IMAGE }}
     steps:
-      # - name: Checkout source
-      #   uses: actions/checkout@v3
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
@@ -30,5 +27,4 @@ jobs:
     steps:
       - name: Use output from previous job
         run: |
-    
           echo "Image: ${{ needs.build-and-deploy.outputs.image }}"
