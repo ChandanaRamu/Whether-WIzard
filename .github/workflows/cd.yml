@@ -80,12 +80,12 @@ jobs:
               echo "NEXT_PUBLIC_API_BASE_URL=https://pv83na4joj.execute-api.us-east-1.amazonaws.com" >> $GITHUB_ENV
               ;;
           esac
-          echo "::set-output name=ACCOUNT_NO::${{ secrets.ACCOUNT_NO }}"
-          echo "::set-output name=REPOSITORY::${{ secrets.REPOSITORY }}"
-          echo "::set-output name=TASK_DEFINITION::${{ secrets.TASK_DEFINITION }}"
-          echo "::set-output name=CONTAINER::${{ secrets.CONTAINER }}"
-          echo "::set-output name=SERVICE::${{ secrets.SERVICE }}"
-          echo "::set-output name=CLUSTER::${{ secrets.CLUSTER }}"
+          echo "::set-output name=ACCOUNT_NO::${{ ACCOUNT_NO }}"
+          echo "::set-output name=REPOSITORY::${{ REPOSITORY }}"
+          echo "::set-output name=TASK_DEFINITION::${{ TASK_DEFINITION }}"
+          echo "::set-output name=CONTAINER::${{ CONTAINER }}"
+          echo "::set-output name=SERVICE::${{ SERVICE }}"
+          echo "::set-output name=CLUSTER::${{ CLUSTER }}"
       - name: Set BASE_URL
         id: base-url
         run: |
