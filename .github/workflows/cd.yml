@@ -33,14 +33,14 @@ jobs:
       - name: Set Environment Variable
         id: set_environment
         run: |
-          case "${{ github.event_name }}-${{ env.branch }}" in
+          case "${{ github.event_name }}" in
             push-develop)
               echo "ENVIRONMENT=uat" >> $GITHUB_ENV
               ;;
             push-main)
               echo "ENVIRONMENT=prod" >> $GITHUB_ENV
               ;;
-            workflow_dispatch-develop)
+            workflow_dispatch)
               echo "ENVIRONMENT=dev" >> $GITHUB_ENV
               ;;
             *)
