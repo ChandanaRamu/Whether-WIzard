@@ -17,9 +17,8 @@ jobs:
           IMAGE_TAG: latest
         run: |
           # Perform the build and tag operations here
-          # For demonstration purposes, echo a dummy value
-          echo "chandana" >> $GITHUB_ENV
-          echo "IMAGE=chandana" >> $GITHUB_ENV
+          # For demonstration purposes, set a dummy value for the image
+          echo "::set-output name=IMAGE::chandana"
 
   deploy :
     runs-on: ubuntu-latest
