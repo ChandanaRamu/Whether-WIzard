@@ -33,14 +33,14 @@ jobs:
       - name: Set Environment Variable
         id: set_environment
         run: |
-          case "${{ github.event_name }}-${{env.branch}}" in
+          case "${{ github.event_name }}-${{ env.branch }}" in
             push-develop)
               echo "ENVIRONMENT=uat" >> $GITHUB_ENV
               ;;
             push-main)
               echo "ENVIRONMENT=prod" >> $GITHUB_ENV
               ;;
-            workflow_dispatch-${{env.branch}})
+            workflow_dispatch-develop)
               echo "ENVIRONMENT=dev" >> $GITHUB_ENV
               ;;
             *)
@@ -80,13 +80,26 @@ jobs:
               echo "NEXT_PUBLIC_API_BASE_URL=https://pv83na4joj.execute-api.us-east-1.amazonaws.com" >> $GITHUB_ENV
               ;;
           esac
-          echo "::set-output name=ACCOUNT_NO::${{ ACCOUNT_NO }}"
-          echo "::set-output name=REPOSITORY::${{ REPOSITORY }}"
-          echo "::set-output name=TASK_DEFINITION::${{ TASK_DEFINITION }}"
-          echo "::set-output name=CONTAINER::${{ CONTAINER }}"
-          echo "::set-output name=SERVICE::${{ SERVICE }}"
-          echo "::set-output name=CLUSTER::${{ CLUSTER }}"
-
+          echo "::set-output name=ACCOUNT_NO::${{ secrets.ACCOUNT_NO }}"
+          echo "::set-output name=REPOSITORY::${{ secrets.REPOSITORY }}"
+          echo "::set-output name=TASK_DEFINITION::${{ secrets.TASK_DEFINITION }}"
+          echo "::set-output name=CONTAINER::${{ secrets.CONTAINER }}"
+          echo "::set-output name=SERVICE::${{ secrets.SERVICE }}"
+          echo "::set-output name=CLUSTER::${{ secrets.CLUSTER }}"
+      - name: Set BASE_URL
+        id: base-url
+        run: |
+          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | tr '/' '-')
+          COMMIT_ID=${{ github.sha }}
+          IMAGE_TAG=$BRANCH_NAME-$COMMIT_ID
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
+          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
+          echo "::set-output name=IMAGE_TAG::${IMAGE_TAG}"
+          echo "::set-output name=ECR_REGISTRY::${ECR_REGISTRY}"
+          # Set Public API Base URL in .env.local file
+          #echo "NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}/${{ env.ENVIRONMENT }}" > .env.local
+          
       # - name: Checkout repository
       #   uses: actions/checkout@v4.1.1
 
@@ -115,36 +128,6 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-buildx-
             
-      - name: Set BASE_URL
-        id: base-url
-        run: |
-          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | tr '/' '-')
-          COMMIT_ID=${{ github.sha }}
-          IMAGE_TAG=$BRANCH_NAME-$COMMIT_ID
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-          ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
-          echo "ECR_REGISTRY=$ECR_REGISTRY" >> $GITHUB_ENV
-          echo "::set-output name=IMAGE_TAG::${{ IMAGE_TAG }}"
-          echo "::set-output name=ECR_REGISTRY::${{ ECR_REGISTRY }}"
-          # Set Public API Base URL in .env.local file
-          #echo "NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}/${{ env.ENVIRONMENT }}" > .env.local
-          
-
-      # - name: Build, tag, and push image to Amazon ECR
-      #   id: build-image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     file: Dockerfile
-      #     platforms: linux/amd64
-      #     push: true
-      #     tags: |
-      #       "${{env.ECR_REGISTRY}}/${{env.REPOSITORY}}:latest"
-      #       "${{env.ECR_REGISTRY}}/${{env.REPOSITORY}}:${{env.IMAGE_TAG}}"
-      #     build-args: ENVIRONMENT=${{ env.ENVIRONMENT }}
-      #     cache-from: type=local,src=/tmp/.buildx-cache
-      #     cache-to: type=local,dest=/tmp/.buildx-cache
-
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-publish  # Wait for the build-and-publish job to finish successfully before starting deployment
@@ -179,5 +162,4 @@ jobs:
       - name: Download task definition
         run: |
             echo "NO: ${{ needs.build-and-publish.outputs.ACCOUNT_NO }}"
-            echo "Image: ${{ needs.build-and-deploy.outputs.IMAGE_TAG }}"
-          
+            echo "Image: ${{ needs.build-and-publish.outputs.IMAGE_TAG }}"
