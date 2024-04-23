@@ -8,7 +8,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     outputs:
-      image: ${{ steps.build-image.outputs.IMAGE }}
+      image: ${{ steps.image.outputs.IMAGE }}
     steps:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
@@ -21,7 +21,9 @@ jobs:
           COMMIT_ID=${{ github.sha }}
           IMAGE_TAG=$BRANCH_NAME-$COMMIT_ID
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-          echo "::set-output name=IMAGE::${IMAGE_TAG}"
+      - name : Set output 
+        id: image
+        run : echo "::set-output name=IMAGE::${env.IMAGE_TAG}"
 
   deploy:
     runs-on: ubuntu-latest
