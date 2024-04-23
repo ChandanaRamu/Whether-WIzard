@@ -19,7 +19,7 @@ jobs:
           # Perform the build and tag operations here
           # For demonstration purposes, echo a dummy value
           echo "chandana" >> $GITHUB_ENV
-          echo "::set-output name=IMAGE::chandana"
+          echo "IMAGE=chandana" >> $GITHUB_ENV
 
   deploy :
     runs-on: ubuntu-latest
