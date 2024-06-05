@@ -163,7 +163,7 @@ jobs:
       #     service: ${{ env.SERVICE }}
       #     cluster: ${{ env.CLUSTER }}
       #     wait-for-service-stability: true
-      - name: Download task definition
-        run: |
-            echo "NO: ${{ needs.build-and-publish.outputs.ACCOUNT_NO }}"
-            echo "Image: ${{ needs.build-and-publish.outputs.IMAGE_TAG }}"
+      # - name: Download task definition
+      #   run: |
+      #       echo "NO: ${{ needs.build-and-publish.outputs.ACCOUNT_NO }}"
+      #       echo "Image: ${{ needs.build-and-publish.outputs.IMAGE_TAG }}"
