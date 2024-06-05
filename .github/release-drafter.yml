@@ -1,11 +1,11 @@
-change-template: "* $TITLE (#$NUMBER) by @$AUTHOR"
-name-template: '$RESOLVED_VERSION'
+name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
+change-template: "* $TITLE (#$NUMBER) by @$AUTHOR"
 categories:
   - title: '⚡ Breaking Changes'
     labels:
       - 'breaking-change'
-  - title: '🌟New features and non-breaking changes'
+  - title: '🌟 New features and non-breaking changes'
     labels:
       - 'major'
       - 'feature'
