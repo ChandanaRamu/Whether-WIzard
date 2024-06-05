@@ -38,7 +38,7 @@ version-resolver:
   patch:
     labels:
       - 'patch'
-  default: major
+  default: patch
 template: |
   ## Summary
 
