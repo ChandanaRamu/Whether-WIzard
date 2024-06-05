@@ -6,7 +6,6 @@ on:
 
 jobs:
   Create-Release:
-    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: Log branch name
@@ -14,6 +13,7 @@ jobs:
           echo "Current branch: ${{ github.ref }}"
         
       - name: New Release Publish
+        if: github.ref == 'refs/heads/master'
         uses: release-drafter/release-drafter@v5
         with:
           publish: true
