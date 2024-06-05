@@ -42,6 +42,8 @@ version-resolver:
 template: |
   ## Summary
 
+  **[Human readable summary of changes]**
+
   ## Changes
 
   $CHANGES
