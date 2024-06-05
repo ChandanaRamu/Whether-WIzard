@@ -20,3 +20,7 @@ jobs:
           publish: true
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+    outputs:
+      release_id: ${{ steps.new_publish.outputs.id }}
+      release_name: ${{ steps.new_publish.outputs.tag_name }}
